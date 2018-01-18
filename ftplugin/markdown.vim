@@ -1,7 +1,6 @@
 " Vim global plugin for markdown table functions
 " Last Change: 2017 Dec 13
 " Maintainer: NORA75
-" Licence: This file is placed public domain
 " Add Command,Mapping and Autocommand
 
 if exists("g:did_markdowntable")

@@ -1,6 +1,5 @@
 *markdowntable.txt* Plugin for markdown table
 --------------------------------------------------------------------------------
-                                                               *markdowntable*
 Description~
 
 This plugin provides commands and mappings for markdown table.
@@ -18,12 +17,12 @@ I can't care about any case.
 --------------------------------------------------------------------------------
 CONTENTS~
 
-1. Command                             *markdowntable-command*
-2. Mapping                             *markdowntable-mapping*
-3. Variables                           *markdowntable-variables*
+1. Command                             |markdowntable-command|
+2. Mapping                             |markdowntable-mapping|
+3. Variables                           |markdowntable-variables|
 
 --------------------------------------------------------------------------------
-                                                       *MarkdownTable-command*
+                                                       *markdowntable-command*
 Command~
 
                                                                   *:TableMake*
@@ -32,7 +31,7 @@ Command~
 
     You can type {row} and {column} to make empty table.
     You can change spaces in cell as you like by changing
-    *g:cell_spaces* . This value change alignment line's bars quantity too.
+    |g:cell_spaces|. This value change alignment line's bars quantity too.
     If you use this command in visual-mode.delete select area and
     make empty table.
 
@@ -45,14 +44,14 @@ Command~
 
     This command is convert plain text to markdown table.
     This command recognize which symbol to convert to separator('|') 
-    by *g:symbolPriority* or {symbols}.
+    by |g:symbolPriority| or {symbols}.
     You can type {symbols} as list to which symbol is separator manually.
     If you use this command with !(bang),the command recognize 
     first line as table header and add alignment line.
 
     Note
     You don't use !(bang).This command don't make alignment line.
-    If you set symbol manually, don't use *g:symbolPriority* .
+    If you set symbol manually, don't use |g:symbolPriority|.
     If the most symbol is't separator('|'),this command escape separator('|').
     How it works:
     Counting each symbol and recognize the most symbol is separator each line.
@@ -61,7 +60,7 @@ Command~
 
 :ToTableAll [{symbols}]
 
-    This command is like *:ToTable* command.See also *:ToTable* .
+    This command is like |:ToTable| command.See also |:ToTable|.
     A differ is convert all symbol to separator('|').
     If you use this command with !(bang),the command recognize first line 
     as table header and add alignment line.
@@ -76,13 +75,13 @@ Mapping~
 
 <Leader>tm
 
-    Trigger to call *:TableMake* .
+    Trigger to call |:TableMake|.
     If you use this mapping,The command waits user's input in command-line.
     If you use this mapping in visual-mode,delete select area and 
     make empty table.
     You can change default key mapping on your .vimrc.
     If you want to use mapping only in markdown file.
-    You should use *autocommand* or *filetype-plugins* with *:map-local* .
+    You should use |autocommand| or |filetype-plugins| with |:map-local|.
 
     Example:
     >
@@ -95,10 +94,10 @@ Mapping~
 
 <Leader>tt
 
-    Trigger to call *:ToTable* .
+    Trigger to call |:ToTable|.
     Convert selected or current line to table.
     If you use this mapping,this command waits user's input in command-line.
-    If you only type enter,this command use *g:symbolPriority* .
+    If you only type enter,this command use |g:symbolPriority|.
     You can change default key mapping on your .vimrc.
 
     Example:
@@ -112,10 +111,10 @@ Mapping~
 
 <Leader>ta
 
-    Trigger to call *:ToTableAll* .
+    Trigger to call |:ToTableAll|.
     Convert selected or current line to table.
     If you use this mapping,The command waits user's input in command-line.
-    If you only type enter,the command use *g:symbolPriority* .
+    If you only type enter,the command use |g:symbolPriority|.
     Convert selected or current line to table.
     You can change default key mapping on your .vimrc.
 
@@ -137,7 +136,7 @@ Variables~
 g:cell_spaces
 
     Default value is 4.
-    This value change spaces amount in the cell for *:TableMake* .
+    This value change spaces amount in the cell for :TableMake.
     This value change alignment line's bar's amount too.
 
     Note
@@ -152,7 +151,7 @@ g:cell_spaces
 
 g:symbolpriority
 
-    This variable is used for *:ToTable* and *:ToTableAll* .
+    This variable is used for |:ToTable| and |:ToTableAll|.
     By default, this variable sets this.
     >
         let g:symbolPriority = [',', ':', ';', '.']
@@ -169,7 +168,7 @@ g:symbolpriority
 g:markdowntable_toTableHeader
 
     If you want to make header always in mapping of 
-    *:ToTable* and *:ToTableAll* ,
+    |:ToTable| and |:ToTableAll| ,
     You can set this value true(not zero) to make header always.
     Default: false(0)
 
@@ -179,6 +178,5 @@ g:markdowntable_toTableHeader
 <
 
 --------------------------------------------------------------------------------
-                                                           *markdowntable.txt*
 
 vim:tw=78:ts=8:ft=help:norl:

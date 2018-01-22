@@ -21,9 +21,9 @@ if !exists(':ToTableAll')
     command! -nargs=? -bang -range -buffer ToTableAll call markdowntable#ToTable('v',<line1>,<line2>,<q-bang>,'All',<q-args>)
 endif
 
-nnoremap <buffer><silent> <Plug>(Markdowntable_tablemake) :set opfunc=markdowntable#TableMake<Bar>exe 'norm! '.v:count1.'g@_'<CR>
-nnoremap <buffer><silent> <Plug>(Markdowntable_totable) :set opfunc=markdowntable#ToTableOp<CR>g@
-nnoremap <buffer><silent> <Plug>(Markdowntable_totableall) :set opfunc=markdowntable#ToTableAll<CR>g@
+nnoremap <buffer><silent> <Plug>(Markdowntable_tablemake) :<C-u>set opfunc=markdowntable#TableMake<Bar>exe 'norm! '.v:count1.'g@_'<CR>
+nnoremap <buffer><silent> <Plug>(Markdowntable_totable) :<C-u>set opfunc=markdowntable#ToTableOp<CR>g@
+nnoremap <buffer><silent> <Plug>(Markdowntable_totableall) :<C-u>set opfunc=markdowntable#ToTableAll<CR>g@
 vnoremap <buffer><silent> <Plug>(Markdowntable_tablemake) :<C-u>call markdowntable#TableMake('v')<CR>
 vnoremap <buffer><silent> <Plug>(Markdowntable_totable) :<C-u>call markdowntable#ToTable('l',line("'<"),line("'>"),'')<CR>
 vnoremap <buffer><silent> <Plug>(Markdowntable_totableall) :<C-U>call markdowntable#ToTable('l',line("'<"),line("'>"),'All')<CR>

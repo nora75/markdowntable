@@ -1,4 +1,4 @@
-# MarkdownTable.vim
+# MarkdownTable
 
 THIS PLUGIN IS NOT COMPLETED YET.  
 Plugin's mapping or command may change in the future.  
@@ -184,7 +184,7 @@ You can use these commands on markdown file.
     vmap <Space>ta <Plug>(Markdowntable_totableall)
     ```
 
-## Customization
+## Customize
 
 + White spaces between cell's separator(|)
 

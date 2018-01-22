@@ -231,8 +231,7 @@ You can use these commands on markdown file.
 
 + Disable default mapping
 
-    You can change this variable true(not zero) to disable all default mappings.  
-    Default: false(0)  
+    You can define this variable to disable all default mappings.  
 
     Example:  
 

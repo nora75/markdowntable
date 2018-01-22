@@ -1,6 +1,7 @@
 " Vim global plugin for markdown table functions
-" Last Change: 2018 Jan 18
+" Last Change: 2018 Jan 22
 " Maintainer: NORA75
+" Licence: MIT
 " autoload
 " General Functions
 

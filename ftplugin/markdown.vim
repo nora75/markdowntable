@@ -1,15 +1,13 @@
 " Vim global plugin for markdown table functions
-" Last Change: 2017 Dec 13
+" Last Change: 2018 Jan 22
 " Maintainer: NORA75
+" Licence: MIT
 " Add Command,Mapping and Autocommand
 
 if exists("g:did_markdowntable")
     finish
 endif
 let g:did_markdowntable=1
-if !exists("g:markdowntable_disableMap")
-    let g:markdowntable_disableMap = 0
-endif
 let s:savecpo = &cpo
 set cpo&vim
 
@@ -30,7 +28,7 @@ vnoremap <buffer><silent> <Plug>(Markdowntable_tablemake) :<C-u>call markdowntab
 vnoremap <buffer><silent> <Plug>(Markdowntable_totable) :<C-u>call markdowntable#ToTable('l',line("'<"),line("'>"),'')<CR>
 vnoremap <buffer><silent> <Plug>(Markdowntable_totableall) :<C-U>call markdowntable#ToTable('l',line("'<"),line("'>"),'All')<CR>
 
-if !g:markdowntable_disableMap
+if exists("g:markdowntable_disableMap")
     if !hasmapto('<Plug>(Markdowntable_tablemake)')
         nmap <buffer> <Leader>tm <Plug>(Markdowntable_tablemake)
         vmap <buffer> <Leader>tm <Plug>(Markdowntable_tablemake)

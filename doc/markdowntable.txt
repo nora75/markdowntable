@@ -1,4 +1,7 @@
 *markdowntable.txt* Plugin for markdown table
+" Last Change: 2018 Jan 22
+" Maintainer: NORA75
+" Licence: MIT
 --------------------------------------------------------------------------------
 Description~
 
@@ -168,7 +171,7 @@ g:symbolpriority
 g:markdowntable_toTableHeader
 
     If you want to make header always in mapping of 
-    |:ToTable| and |:ToTableAll| ,
+    |:ToTable| and |:ToTableAll|,
     You can set this value true(not zero) to make header always.
     Default: false(0)
 
@@ -176,6 +179,14 @@ g:markdowntable_toTableHeader
     >
         let g:markdowntable_toTableHeader = 1
 <
+                                                  *g:markdowntable_disableMap*
+g:markdowntable_disableMap
 
+    If you define this variable, disable all default mapping.
+
+    Example:
+    >
+        let g:markdowntable_disableMap = 1
+<
 --------------------------------------------------------------------------------
 vim:tw=78:ts=8:ft=help:norl:

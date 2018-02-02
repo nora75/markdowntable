@@ -25,9 +25,10 @@ You can use these commands on markdown file.
 
 + TableMake
 
-    This command makes empty table.  
+    Make empty table.  
     You can set how many rows and columns.  
-    This command adjust indents automatically.  
+    In visual-mode, delete selected a
+    In visual-mode.delete select area and make empty table.  
 
     How to use:  
 
@@ -54,11 +55,11 @@ You can use these commands on markdown file.
 
 + ToTable
 
-    You can use this command with no args to convert plain text to table.  
-    This command recognize which symbol to convert to separator(|) by g:symbolPriority.  
-    You can type {symbols} as list to which symbol is separator manually.  
+    Convert plain text to markdown table.  
+    Recognize which symbol to convert to separator(|) by g:symbolPriority.  
+    You can type {symbols} as list to select which symbol is separator manually.  
     If you use this command with bang(!),the command recognize first line as table header and add alignment line.  
-    This command adjust indents automatically.and delete empty lines.  
+    Adjust indents automatically.and delete empty lines.  
 
     How to use:  
 
@@ -96,10 +97,9 @@ You can use these commands on markdown file.
 
 + ToTableAll
 
-    You can use this command to convert plain text to table.  
+    Convert plain text to table.  
     A differs from all symbol convert to separator(|) in terms of :ToTable.  
-    If you use this command with !(bang),the command recognize first line as table header and add alignment line.  
-    This command adjust indents automatically.and delete empty lines.  
+    Other thing is same as :ToTable.  
 
     How to use:  
 

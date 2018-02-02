@@ -35,8 +35,7 @@ Command~
     You can type {row} and {column} to make empty table.
     You can change spaces in cell as you like by changing
     |g:cell_spaces|. This value change alignment line's bars quantity too.
-    If you use this command in visual-mode.delete select area and
-    make empty table.
+    In visual-mode.delete select area and make empty table.
 
     Note
     Error occur if {row} or {column} is smaller than zero or no args.
@@ -45,17 +44,17 @@ Command~
 
 :ToTable [{symbols}]
 
-    This command is convert plain text to markdown table.
-    This command recognize which symbol to convert to separator('|') 
+    Convert plain text to markdown table.
+    Recognize which symbol to convert to separator('|') 
     by |g:symbolPriority| or {symbols}.
     You can type {symbols} as list to which symbol is separator manually.
-    If you use this command with !(bang),the command recognize 
+    If you use !(bang),the command recognize 
     first line as table header and add alignment line.
+    Adjust indents and delete empty lines automatically.
 
     Note
-    You don't use !(bang).This command don't make alignment line.
     If you set symbol manually, don't use |g:symbolPriority|.
-    If the most symbol is't separator('|'),this command escape separator('|').
+    If the symbol is't separator('|'),this command escape separator('|').
     How it works:
     Counting each symbol and recognize the most symbol is separator each line.
 
@@ -80,8 +79,7 @@ Mapping~
 
     Trigger to call |:TableMake|.
     If you use this mapping,The command waits user's input in command-line.
-    If you use this mapping in visual-mode,delete select area and 
-    make empty table.
+    In visual-mode,delete selected area and make empty table.
     You can change default key mapping on your .vimrc.
     If you want to use mapping only in markdown file.
     You should use |autocommand| or |filetype-plugins| with |:map-local|.
@@ -115,10 +113,7 @@ Mapping~
 <Leader>ta
 
     Trigger to call |:ToTableAll|.
-    Convert selected or current line to table.
-    If you use this mapping,The command waits user's input in command-line.
-    If you only type enter,the command use |g:symbolPriority|.
-    Convert selected or current line to table.
+    Same as |:ToTable| mapping.
     You can change default key mapping on your .vimrc.
 
     Example:

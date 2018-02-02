@@ -90,7 +90,7 @@ func! markdowntable#ToTable(type,...) abort
         else
             let bang = 0
         endif
-        if a:0 > 4
+        if a:0 > 5
             let symbolP = split(join(deepcopy(a:000[4:]),"\s"),'')
         else
             let symbolP = deepcopy(g:markdowntable_symbolPriority)
@@ -117,7 +117,7 @@ func! markdowntable#ToTable(type,...) abort
                 let curline = s:escapeSep(curline)
             endif
             for symbol in symbolP
-                let curline = s:changeTable(symbol,leftwhite,curline)
+                let curline = s:changeTable(symbol,curline)
             endfor
             call add(setline,curline)
         endfor
@@ -219,9 +219,9 @@ func! s:changeTable(symbol,curline) abort
     let aflist = split(curline,'\M\[^\\'.a:symbol.']\+\zs\|\(\\\.\zs\)\|'.a:symbol.'\zs')
     let k = 0
     while k < len(aflist)
-        if aflist[k] =~# '\\'.a:symbol
+        if aflist[k] =~# '\M\\'.a:symbol
             let aflist[k] = a:symbol
-        elseif aflist[k] =~# a:symbol
+        elseif aflist[k] =~# '\M'.a:symbol
             if k != 0 && aflist[k-1] !~ '\M\s$'
                 let aflist[k] = ' |'
             else
@@ -236,9 +236,9 @@ func! s:changeTable(symbol,curline) abort
     let curline = join(aflist,'')
     if aflist[0] =~ '\M^|\s'
         let curline = curline
-    elseif aflist[0] =~ '\M^|\[^\s]\+'
+    elseif aflist[0] =~ '\M^|\S\+'
         let curline = "| ".strcharpart(curline,1,len(curline))
-    elseif aflist[0] =~ '\M^\[^\s]'
+    elseif aflist[0] =~ '\M^\S'
         let curline = "| ".curline
     else
         let curline = "|".curline

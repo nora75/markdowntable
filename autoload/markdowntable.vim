@@ -5,19 +5,19 @@
 " autoload
 " General Functions
 
-if exists("g:loaded_markdowntable")
+if exists('g:loaded_markdowntable')
     finish
 endif
 let g:loaded_markdowntable = 1
 let s:savecpo = &cpo
 set cpo&vim
-if !exists("g:markdowntable_cellSpaces")
+if !exists('g:markdowntable_cellSpaces')
     let g:markdowntable_cellSpaces = 4
 endif
-if !exists("g:markdowntable_symbolPriority")
+if !exists('g:markdowntable_symbolPriority')
     let g:markdowntable_symbolPriority = [';',':',',','.']
 endif
-if !exists("g:markdowntable_toTableHeader")
+if !exists('g:markdowntable_toTableHeader')
     let g:markdowntable_toTableHeader = 0
 endif
 
@@ -90,7 +90,7 @@ func! markdowntable#ToTable(type,...) abort
         else
             let bang = 0
         endif
-        if a:0 > 5
+        if a:0 > 4
             let symbolP = split(join(deepcopy(a:000[4:]),"\s"),'')
         else
             let symbolP = deepcopy(g:markdowntable_symbolPriority)
@@ -237,14 +237,14 @@ func! s:changeTable(symbol,curline) abort
     if aflist[0] =~ '\M^|\s'
         let curline = curline
     elseif aflist[0] =~ '\M^|\S\+'
-        let curline = "| ".strcharpart(curline,1,len(curline))
+        let curline = '| '.strcharpart(curline,1,len(curline))
     elseif aflist[0] =~ '\M^\S'
-        let curline = "| ".curline
+        let curline = '| '.curline
     else
-        let curline = "|".curline
+        let curline = '|'.curline
     endif
     if aflist[-1] !~ '\M\[^\\]|\s\*$'
-        let curline .= " |"
+        let curline .= ' |'
     endif
     return curline
 endfunc

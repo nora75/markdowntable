@@ -212,10 +212,10 @@ You can use these commands on markdown file.
 
     You can set own priorities of symbol by variable.  
 
-    Example: set priority "|" → "," → "."  
+    Example: set priority '|' → ',' → '.'  
 
     ```
-    let g:markdowntable_symbolPriority = ["|", ",", "."]  
+    let g:markdowntable_symbolPriority = ['|', ',', '.']  
     ```
 
 + Make header or no header always when use :ToTable and :ToTableAll mapping

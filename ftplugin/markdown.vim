@@ -4,7 +4,7 @@
 " Licence: MIT
 " Add Command,Mapping and Autocommand
 
-if exists("g:did_markdowntable")
+if exists('g:did_markdowntable')
     finish
 endif
 let g:did_markdowntable=1
@@ -28,7 +28,7 @@ vnoremap <buffer><silent> <Plug>(Markdowntable_tablemake) :<C-u>call markdowntab
 vnoremap <buffer><silent> <Plug>(Markdowntable_totable) :<C-u>call markdowntable#ToTable('l',line("'<"),line("'>"),'')<CR>
 vnoremap <buffer><silent> <Plug>(Markdowntable_totableall) :<C-U>call markdowntable#ToTable('l',line("'<"),line("'>"),'All')<CR>
 
-if exists("g:markdowntable_disableMap")
+if exists('g:markdowntable_disableMap')
     if !hasmapto('<Plug>(Markdowntable_tablemake)')
         nmap <buffer> <Leader>tm <Plug>(Markdowntable_tablemake)
         vmap <buffer> <Leader>tm <Plug>(Markdowntable_tablemake)

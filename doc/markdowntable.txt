@@ -156,10 +156,10 @@ g:symbolpriority
 <
     You can set own priorities of symbol by variable.  
 
-    Example: set priority "|" → "," → "."  
+    Example: set priority '|' → ',' → '.'  
 
     >
-        let g:symbolPriority = ["|", ",", "."]  
+        let g:symbolPriority = ['|', ',', '.']  
 <
 
                                                *g:markdowntable_toTableHeader*

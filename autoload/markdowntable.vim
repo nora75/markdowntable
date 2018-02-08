@@ -90,7 +90,7 @@ func! markdowntable#ToTable(type,...) abort
         else
             let bang = 0
         endif
-        if a:0 > 4
+        if a:5 != ''
             let symbolP = split(join(deepcopy(a:000[4:]),"\s"),'')
         else
             let symbolP = deepcopy(g:markdowntable_symbolPriority)
@@ -133,10 +133,11 @@ func! markdowntable#ToTable(type,...) abort
                 call add(symbolDetect,count(aflist,symbol))
             endfor
             let max = max(symbolDetect)
+            let max = index(symbolDetect,max)
             if max < 0
                 let max = 0
             endif
-            exe 'let symbol = symbolP['.index(symbolDetect,).']'
+            exe 'let symbol = symbolP['.max.']'
             if symbol != '\M|'
                 let curline = s:escapeSep(curline)
             endif

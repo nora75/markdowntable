@@ -71,7 +71,7 @@ func! markdowntable#TableMake(type,...) abort
 endfunc
 
 func! markdowntable#ToTable(type,...) abort
-    if a:type == 'l'
+    if a:type ==# 'l'
         let symbolP  = s:tableChar("If you don't want to set symbols,type only enter\nInput symbols with space")
         if symbolP == -1
             return
@@ -107,7 +107,7 @@ func! markdowntable#ToTable(type,...) abort
         let i+=1
     endwhile
     let leftwhite = matchstr(getline(line1),'\M^\s\+')
-    if mode == 'All'
+    if mode ==# 'All'
         for lnum in range(i,line2)
             let curline = matchstr(getline(lnum),'\M\S\.\*\ze\s\*$')
             if curline == ''
@@ -132,8 +132,12 @@ func! markdowntable#ToTable(type,...) abort
             for symbol in symbolP
                 call add(symbolDetect,count(aflist,symbol))
             endfor
-            exe 'let symbol = symbolP['.index(symbolDetect,max(symbolDetect)).']'
-            if symbol != '|'
+            let max = max(symbolDetect)
+            if max < 0
+                let max = 0
+            endif
+            exe 'let symbol = symbolP['.index(symbolDetect,).']'
+            if symbol != '\M|'
                 let curline = s:escapeSep(curline)
             endif
             let curline = s:changeTable(symbol,curline)
@@ -201,9 +205,9 @@ func! s:tableChar(msg) abort
             if len(c) < 2
                 call add(ret,c)
             else
-                if c == 'bs'
+                if c ==# 'bs'
                     silent! call remove(ret, -1)
-                elseif c == 'en'
+                elseif c ==# 'en'
                     break
                 else
                     return -1
@@ -253,8 +257,8 @@ func! s:escapeSep(curline) abort
     let aflist = split(a:curline,'\M\[^\\|]\+\zs\|\(\\\.\zs\)\||\zs')
     let k = 0
     while k < len(aflist)
-        if aflist[k] == '|'
-            let aflist[k] = '\|'
+        if aflist[k] == '\M|'
+            let aflist[k] = '\M\|'
         endif
         let k += 1
     endwhile

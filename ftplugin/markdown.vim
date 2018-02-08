@@ -4,10 +4,10 @@
 " Licence: MIT
 " Add Command,Mapping and Autocommand
 
-if exists('g:did_markdowntable')
+if exists('b:did_markdowntable')
     finish
 endif
-let g:did_markdowntable=1
+let b:did_markdowntable=1
 let s:savecpo = &cpo
 set cpo&vim
 

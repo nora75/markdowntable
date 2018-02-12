@@ -42,34 +42,41 @@ Command~
 
                                                                     *:ToTable*
 
-:ToTable [{symbols}]
+:ToTable [{Strings}]
 
     Convert plain text to markdown table.
-    Recognize which symbol to convert to separator('|') 
-    by |g:symbolPriority| or {symbols}.
-    You can type {symbols} as list to which symbol is separator manually.
-    If you use !(bang),the command recognize 
-    first line as table header and add alignment line.
+    Recognize which String to convert to separator('|') 
+    by |g:StringPriority| or {Strings}.
+    You can type {Strings} as list to which String is separator manually.
+    Recognize first line as table header and add alignment line.
     Adjust indents and delete empty lines automatically.
+    Don't want to make alignment line.Use this command with bang('|')
 
     Note
-    If you set symbol manually, don't use |g:symbolPriority|.
-    If the symbol is't separator('|'),this command escape separator('|').
+    If you set String manually, don't use |g:StringPriority|.
+    If the String is't separator('|'),this command escape separator('|').
     How it works:
-    Counting each symbol and recognize the most symbol is separator each line.
+    Counting each String and recognize the most String is separator each line.
 
                                                                  *:ToTableAll*
 
-:ToTableAll [{symbols}]
+:ToTableAll [{Strings}]
 
-    This command is like |:ToTable| command.See also |:ToTable|.
-    A differ is convert all symbol to separator('|').
-    If you use this command with !(bang),the command recognize first line 
-    as table header and add alignment line.
+    This command is almost all same as |:ToTable| command.See also |:ToTable|.
+    A differ is convert all String to separator('|').
 
     Note
-    If you don't set separator('|') as symbol in this command.
+    If you don't set separator('|') as String in this command.
     This command escape separator('|').
+
+                                                                    *:UnTable*
+
+:UnTable
+
+    Convert table to plain text.
+    Delete alignment line, if it exists.
+    Convert separator('|') to |g:markdowntable_untableString|.
+    Default convert to a space.
 
 --------------------------------------------------------------------------------
                                                        *markdowntable-mapping*
@@ -86,8 +93,8 @@ Mapping~
 
     Example:
     >
-        nmap <Space>tm <Plug>(Markdowntable_Tablemake)
-        vmap <Space>tm <Plug>(Markdowntable_Tablemake)
+        nmap <Space>tm <Plug>(markdowntable_tablemake)
+        vmap <Space>tm <Plug>(markdowntable_tablemake)
 <
     Note
     You can repeat this mapping by dot.But you are going to 
@@ -98,17 +105,16 @@ Mapping~
     Trigger to call |:ToTable|.
     Convert selected or current line to table.
     If you use this mapping,this command waits user's input in command-line.
-    If you only type enter,this command use |g:symbolPriority|.
+    If you only type enter,this command use |g:StringPriority|.
     You can change default key mapping on your .vimrc.
 
     Example:
     >
-        nmap <Space>tt <Plug>(Markdowntable_Totable)
-        vmap <Space>tt <Plug>(Markdowntable_Totable)
+        nmap <Space>tt <Plug>(markdowntable_totable)
+        vmap <Space>tt <Plug>(markdowntable_totable)
 <
     Note
-    You can repeat this mapping by dot.But you are going to 
-    set symbols again.
+    You can repeat this mapping by dot.But you'll have to set Strings again.
 
 <Leader>ta
 
@@ -118,12 +124,25 @@ Mapping~
 
     Example:
     >
-        nmap <Space>ta <Plug>(Markdowntable_Totableall)
-        vmap <Space>ta <Plug>(Markdowntable_Totableall)
+        nmap <Space>ta <Plug>(markdowntable_totableall)
+        vmap <Space>ta <Plug>(markdowntable_totableall)
+<
+    Note
+    You can repeat this mapping by dot.But you'll have to set Strings again.
+
+<Leader>tu
+
+    Trigger to call |:UnTable|.
+    You can change default key mapping on your .vimrc.
+
+    Example:
+    >
+        nmap <Space>tu <Plug>(markdowntable_untable)
+        vmap <Space>tu <Plug>(markdowntable_untable)
 <
     Note
     You can repeat this mapping by dot.But you are going to 
-    set symbols again.
+    set Strings again.
 
 --------------------------------------------------------------------------------
                                                      *markdowntable-variables*
@@ -145,43 +164,56 @@ g:cell_spaces
     >
         let g:cell_spaces = 8
 <
-                                                            *g:symbolpriority*
+                                                            *g:Stringpriority*
 
-g:symbolpriority
+g:Stringpriority
 
     This variable is used for |:ToTable| and |:ToTableAll|.
     By default, this variable sets this.
     >
-        let g:symbolPriority = [',', ':', ';', '.']
+        let g:StringPriority = [',', ':', ';', '.']
 <
-    You can set own priorities of symbol by variable.  
+    You can set own priorities of String by variable.  
 
-    Example: set priority "|" → "," → "."  
+    Example: set priority '|' → ',' → '.'  
 
     >
-        let g:symbolPriority = ["|", ",", "."]  
+        let g:StringPriority = ['|', ',', '.']  
 <
 
-                                               *g:markdowntable_toTableHeader*
-g:markdowntable_toTableHeader
+                                               *g:markdowntable_totableheader*
+g:markdowntable_noalign
 
-    If you want to make header always in mapping of 
+    If you want not to make alignment line always in mapping of 
     |:ToTable| and |:ToTableAll|,
-    You can set this value true(not zero) to make header always.
+    You can set this value true(not zero) to don't make alignment line always.
     Default: false(0)
 
     Example:
     >
-        let g:markdowntable_toTableHeader = 1
+        let g:markdowntable_noalign = 1
+        let g:markdowntable_noalign = v:true
 <
-                                                  *g:markdowntable_disableMap*
-g:markdowntable_disableMap
+                                                  *g:markdowntable_enablemap*
+g:markdowntable_enablemap
 
-    If you define this variable, disable all default mapping.
+    If you define this variable, enable all default mapping.
 
     Example:
     >
-        let g:markdowntable_disableMap = 1
+        let g:markdowntable_enablemap = 1
+        let g:markdowntable_enablemap = v:true
+<
+                                               *g:markdowntable_untableString*
+g:markdowntable_untableString
+
+    You can change convert separator('|') to specific char by define this 
+    variable.
+    Default: '' (empty char)
+
+    Example:
+    >
+        let g:markdowntable_untableString = ','
 <
 --------------------------------------------------------------------------------
 vim:tw=78:ts=8:ft=help:norl:

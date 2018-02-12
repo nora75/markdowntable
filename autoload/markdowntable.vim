@@ -11,14 +11,17 @@ endif
 let g:loaded_markdowntable = 1
 let s:savecpo = &cpo
 set cpo&vim
-if !exists('g:markdowntable_cellSpaces')
-    let g:markdowntable_cellSpaces = 4
+if !exists('g:markdowntable_cellspaces')
+    let g:markdowntable_cellspaces = 4
 endif
-if !exists('g:markdowntable_symbolPriority')
-    let g:markdowntable_symbolPriority = [';',':',',','.']
+if !exists('g:markdowntable_Stringpriority')
+    let g:markdowntable_Stringpriority = [';',':',',','.']
 endif
-if !exists('g:markdowntable_toTableHeader')
-    let g:markdowntable_toTableHeader = 0
+if !exists('g:markdowntable_noalign')
+    let g:markdowntable_noalign = 1
+endif
+if !exists('g:markdowntable_untableString')
+    let g:markdowntable_untableString = ' '
 endif
 
 func! markdowntable#TableMake(type,...) abort
@@ -40,25 +43,29 @@ func! markdowntable#TableMake(type,...) abort
         redraw!
     else
         if a:1 == a:2
-            let lnum = a:1-1 ? a:1-1 : 0
+            let lnum = a:1
         else
             let lnum = a:1
             type = 'v'
         endif
-        if a:0 < 4
+        let tmp = split(a:3,'\s')
+        if len(tmp) < 2
             call s:echoWarn('Please set two values to make raw and column')
             return
-        elseif a:3 < 0 || a:4 < 0
+        elseif type(tmp[0]) != 1 &&type(tmp[1]) != 1
+            call s:echoWarn('Please set number')
+            return
+        elseif tmp[0] < 0 || tmp[1] < 0
             call s:echoWarn('Please set pluss values')
             return
         else
-            let row = a:1
-            let column = a:2
+            let row = tmp[0]
+            let column = tmp[1]
         endif
     endif
-    let tableSpaces = ' '.repeat(' ',g:markdowntable_cellSpaces).'|'
-    let tableLine = '|'.repeat(tableSpaces,row)
-    let table = repeat([tableLine],column+1)
+    let tableSpaces = repeat(' ',g:markdowntable_cellspaces).'|'
+    let tableLine = '|'.repeat(tableSpaces,column)
+    let table = repeat([tableLine],row+1)
     let tableHeader = substitute(tableLine,'\M ','-','g')
     call insert(table,tableHeader,1)
     let leftwhite = matchstr(getline(lnum),'\M^\s\+')
@@ -72,81 +79,92 @@ endfunc
 
 func! markdowntable#ToTable(type,...) abort
     if a:type ==# 'l'
-        let symbolP  = s:tableChar("If you don't want to set symbols,type only enter\nInput symbols with space")
-        if symbolP == -1
+        let StringP  = s:tableChar("Type only enter,if don't want to arbitrary String\nInput String with space")
+        if StringP == -1
             return
-        elseif symbolP == ''
-            let symbolP = deepcopy(g:markdowntable_symbolPriority)
+        elseif StringP == ''
+            let StringP = deepcopy(g:markdowntable_Stringpriority)
         else
-            let symbolP = split(symbolP,'\s')
+            let StringP = split(StringP,'\s')
         endif
-        let [line1,line2] = [line("'["),line("']")]
-        let bang = g:markdowntable_toTableHeader
+        if a:0 > 1
+            let [line1,line2] = [a:2,a:3]
+        else
+            let [line1,line2] = [line("'["),line("']")]
+        endif
+        let bang = g:markdowntable_noalign
         let mode = a:1
     else
         let [line1,line2] = [a:1,a:2]
         if a:3 == '!'
-            let bang = 1
-        else
             let bang = 0
+        else
+            let bang = 1
         endif
         if a:5 != ''
-            let symbolP = split(join(deepcopy(a:000[4:]),"\s"),'')
+            let StringP = split(join(deepcopy(a:000[4:]),"\s"),'')
         else
-            let symbolP = deepcopy(g:markdowntable_symbolPriority)
+            let StringP = deepcopy(g:markdowntable_Stringpriority)
         endif
         let mode = a:4
     endif
     let setline = []
     let i = line1
-    while 1 <= line2
+    while i <= line2
         let k = getline(i)
-        if k =~ '\M^\.\+$'
+        if k =~ '\M\S\.\+'
             break
         endif
         let i+=1
     endwhile
-    let leftwhite = matchstr(getline(line1),'\M^\s\+')
+    let leftwhite = matchstr(getline(i),'\M^\s\+')
     if mode ==# 'All'
+        let StringP = sort(StringP)
+        let StringP = uniq(StringP)
+        let hasSep = count(StringP,'|')
+        if hasSep == 0
+            call remove(StringP,index(StringP,'|'))
+        endif
         for lnum in range(i,line2)
-            let curline = matchstr(getline(lnum),'\M\S\.\*\ze\s\*$')
-            if curline == ''
+            let curline = s:getCurline(lnum)
+            if curline ==# 'con'
                 continue
             endif
-            if count(symbolP,'|')
+            if hasSep == 0
                 let curline = s:escapeSep(curline)
             endif
-            for symbol in symbolP
-                let curline = s:changeTable(symbol,curline)
+            for String in StringP
+                let curline = s:changeTable(curline,String)
             endfor
             call add(setline,curline)
         endfor
     else
         for lnum in range(i,line2)
-            let curline = matchstr(getline(lnum),'\M\S\.\*\ze\s\*$')
-            if curline == ''
+            let curline = s:getCurline(lnum)
+            if curline ==# 'con'
                 continue
             endif
             let aflist = split(curline,'\M\[^\\]\zs\|\\\.\zs')
-            let symbolDetect = []
-            for symbol in symbolP
-                call add(symbolDetect,count(aflist,symbol))
+            let StringDetect = []
+            for String in StringP
+                call add(StringDetect,count(aflist,String))
             endfor
-            let max = max(symbolDetect)
-            let max = index(symbolDetect,max)
+            let max = max(StringDetect)
+            let max = index(StringDetect,max)
             if max < 0
                 let max = 0
             endif
-            exe 'let symbol = symbolP['.max.']'
-            if symbol != '\M|'
+            exe 'let String = StringP['.max.']'
+            if String != '|'
                 let curline = s:escapeSep(curline)
             endif
-            let curline = s:changeTable(symbol,curline)
+            let curline = s:changeTable(curline,String)
             call add(setline,curline)
         endfor
     endif
-    if bang && i != line2
-        let bars = ' '.repeat('-',g:markdowntable_cellSpaces).' |'
+    echomsg string(setline)
+    if bang && i != line2 && len(setline) != 0
+        let bars = ' '.repeat('-',g:markdowntable_cellspaces).' |'
         let j = 0
         let k = 1
         while k > 0
@@ -159,7 +177,65 @@ func! markdowntable#ToTable(type,...) abort
     call map(setline,'leftwhite.v:val')
     silent call append(line2,setline)
     silent exe line1.','.line2.'delete _'
-    echomsg 'ToTable'.mode.' works successfully'
+    call s:echored('ToTable'.mode.' works successfully')
+endfunc
+
+func! markdowntable#UnTable(type,...) abort
+    if a:type =~ '\M^l\|b\|c\.\+$'
+        if a:0 > 1
+            let [line1,line2] = [a:1,a:2]
+        else
+            let [line1,line2] = [line("'["),line("']")]
+        endif
+        let String = s:tableChar("Type only enter,If you don't want to set any String\nInput String")
+        if String == -1
+            return
+        elseif String !=# ''
+            if stridx(String,"\s") != -1 && stridx(String,"\s") != 0
+                let String = strcharpart(String,1,stridx(String,"\s"))
+            endif
+        endif
+    else
+        let [line1,line2] = [a:1,a:2]
+        if a:3 != ''
+            if stridx(a:3,"\s") != -1
+                let String = strcharpart(a:3,0,stridx(a:3,"\s"))
+            else
+                let String = a:3
+            endif
+        else
+            let String = g:markdowntable_untableString
+        endif
+    endif
+    let setline = []
+    let i = line1
+    while i <= line2
+        let k = getline(i)
+        if k =~ '\M\S\.\+'
+            break
+        endif
+        let i+=1
+    endwhile
+    let leftwhite = matchstr(getline(i),'\M^\s\+')
+    let curline = s:retText(i,String)
+    if curline !=# 'con'
+        call add(setline,curline)
+    endif
+    let curline = getline(i+1)
+    if curline !~ '\M^\s\*|\(\s\*:\?-\+:\?\s\*|\s\*\)\+$'
+        let curline = s:retText(i+1,String)
+        if curline !=# 'con'
+            call add(setline,curline)
+        endif
+    endif
+    for lnum in range(i+2,line2)
+        let curline = s:retText(lnum,String)
+        call add(setline,curline)
+    endfor
+    call map(setline,'leftwhite.v:val')
+    silent call append(line2,setline)
+    silent exe line1.','.line2.'delete _'
+    call s:echored('UnTable works successfully')
 endfunc
 
 func! s:echoWarn(msg)
@@ -168,6 +244,13 @@ func! s:echoWarn(msg)
     echomsg a:msg
     echohl None
     return -1
+endfunc
+
+func! s:echored(msg)
+    echohl None
+    redraw!
+    echomsg a:msg
+    return
 endfunc
 
 func! s:makeChar(msg) abort
@@ -195,6 +278,19 @@ func! s:getChar() abort
     return c
 endfunc
 
+func! s:getCurline(lnum) abort
+    let curline = matchstr(getline(a:lnum),'\M\S\.\*')
+    if curline == ''
+        return 'con'
+    elseif curline =~ '\M\s\*$'
+        let ridx = matchend(curline,'\M\s\*$')
+    else
+        let ridx = len(curline)
+    endif
+    let curline = strcharpart(curline,0,ridx)
+    return curline
+endfunc
+
 func! s:tableChar(msg) abort
     let msg = a:msg.': '
     let ret = []
@@ -219,14 +315,14 @@ func! s:tableChar(msg) abort
     return join(ret,'')
 endfunc
 
-func! s:changeTable(symbol,curline) abort
+func! s:changeTable(curline,String) abort
     let curline = a:curline
-    let aflist = split(curline,'\M\[^\\'.a:symbol.']\+\zs\|\(\\\.\zs\)\|'.a:symbol.'\zs')
+    let aflist = split(curline,'\M\[^\\'.a:String.']\+\zs\|\(\\\.\zs\)\|'.a:String.'\zs')
     let k = 0
     while k < len(aflist)
-        if aflist[k] =~# '\M\\'.a:symbol
-            let aflist[k] = a:symbol
-        elseif aflist[k] =~# '\M'.a:symbol
+        if aflist[k] =~# '\M\\'.a:String
+            let aflist[k] = a:String
+        elseif aflist[k] =~# '\M'.a:String
             if k != 0 && aflist[k-1] !~ '\M\s$'
                 let aflist[k] = ' |'
             else
@@ -266,12 +362,52 @@ func! s:escapeSep(curline) abort
     return join(aflist,'')
 endfunc
 
+func! s:changeText(curline,String) abort
+    let aflist = split(a:curline,'\M\[^\\|]\+\zs\|\(\\\.\zs\)\||\s\*\zs')
+    let k = 0
+    while k < len(aflist)
+        if aflist[k] =~ '\M\\\.'
+            let aflist[k] = matchstr(aflist[k],'\M\\\zs\.')
+        elseif aflist[k] =~ '\M\s\*|\s\*'
+            if k != 0 && aflist[k-1] =~ '\M\s\+$'
+                let ridx = match(aflist[k-1],'\M\s\+$')
+                let aflist[k-1] = strcharpart(aflist[k-1],0,ridx)
+            endif
+            let aflist[k] = a:String
+        endif
+        let k += 1
+    endwhile
+    return join(aflist,'')
+endfunc
+
+func! s:retText(lnum,String) abort
+    let curline = matchstr(getline(a:lnum),'\M\S\.\*')
+    if curline == ''
+        return 'con'
+    elseif curline =~ '\M|\s\*$'
+        let ridx = match(curline,'\M\S\s\*|\s\*$')
+    else
+        let ridx = match(curline,'\M\S\s\*$')
+    endif
+    if curline =~ '\M^|'
+        let lidx = match(curline,'\M|\s\*\zs')
+    else
+        let lidx = 0
+    endif
+    let curline = strcharpart(curline,lidx,ridx)
+    return s:changeText(curline,a:String)
+endfunc
+
 func! markdowntable#ToTableOp(type,...) abort
     call markdowntable#ToTable('l','')
 endfunc
 
 func! markdowntable#ToTableAll(type,...) abort
     call markdowntable#ToTable('l','All')
+endfunc
+
+func! markdowntable#UnTableOp(type,...) abort
+    call markdowntable#UnTable('l')
 endfunc
 
 let &cpo = s:savecpo

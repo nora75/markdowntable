@@ -1,4 +1,4 @@
-# MarkdownTable
+# markdowntable
 
 THIS PLUGIN IS NOT COMPLETED YET.  
 Plugin's mapping or command may change in the future.  
@@ -55,56 +55,101 @@ You can use these commands on markdown file.
 
 + ToTable
 
-    Convert plain text to markdown table.  
-    Recognize which symbol to convert to separator(|) by g:symbolPriority.  
-    You can type {symbols} as list to select which symbol is separator manually.  
-    If you use this command with bang(!),the command recognize first line as table header and add alignment line.  
-    Adjust indents automatically.and delete empty lines.  
+Convert plain text to markdown table.  
+Recognize which symbol to convert to separator(|) by g:symbolPriority.  
+You can type {symbols} as list to select which symbol is separator manually.  
+Recognize first line as header and add alignment line.  
+If you use this command with bang(!), don't make alignment line.
+Adjust indents automatically.and delete empty lines.  
 
-    How to use:  
+How to use:  
 
-    ```
-    :ToTable [{symbols}]
-    ```
+```
+:ToTable [{symbols}]
+```
 
     + Example
 
-        Input  
-        <code>:ToTable \s</code> with select area.
+    Input  
+    <code>:ToTable \s</code> with select area.
 
-        Before  
+    Before  
 
-        ```
-        nnoremap <buffer><silent> <Plug>
-        nnoremap <buffer><silent> <Plug>
-        nnoremap <buffer><silent> <Plug>
-        vnoremap <buffer><silent> <Plug>
+    ```
+    nnoremap <buffer><silent> <Plug>
+    nnoremap <buffer><silent> <Plug>
+    nnoremap <buffer><silent> <Plug>
+    vnoremap <buffer><silent> <Plug>
 
-        vnoremap <buffer><silent> <Plug>
-        vnoremap <buffer><silent> <Plug>
-        ```
+    vnoremap <buffer><silent> <Plug>
+    vnoremap <buffer><silent> <Plug>
+    ```
 
-        After  
+    After  
 
-        ```
-        | nnoremap | <buffer><silent> | <Plug> |
-        | nnoremap | <buffer><silent> | <Plug> |
-        | nnoremap | <buffer><silent> | <Plug> |
-        | vnoremap | <buffer><silent> | <Plug> |
-        | vnoremap | <buffer><silent> | <Plug> |
-        | vnoremap | <buffer><silent> | <Plug> |
-        ```
+    ```
+    | nnoremap | <buffer><silent> | <Plug> |
+    | ---- | ---- | ---- |
+    | nnoremap | <buffer><silent> | <Plug> |
+    | nnoremap | <buffer><silent> | <Plug> |
+    | vnoremap | <buffer><silent> | <Plug> |
+    | vnoremap | <buffer><silent> | <Plug> |
+    | vnoremap | <buffer><silent> | <Plug> |
+    ```
 
 + ToTableAll
 
-    Convert plain text to table.  
-    A differs from all symbol convert to separator(|) in terms of :ToTable.  
-    Other thing is same as :ToTable.  
+Convert plain text to table.  
+A differs from all symbol convert to separator(|) in terms of :ToTable.  
+Other thing is same as :ToTable.  
+
+How to use:  
+
+```
+:ToTableAll [{symbols}]
+```
+
+    + Example
+
+    Input  
+
+    ```
+    :ToTableAll ; : <
+    ```
+
+    Before  
+
+    ```
+    nnoremap ;buffer:silent<Plug
+    nnoremap ;buffer:silent<Plug
+    nnoremap ;buffer:silent<Plug
+    vnoremap ;buffer:silent<Plug
+    vnoremap ;buffer:silent<Plug
+    vnoremap ;buffer:silent<Plug
+    ```
+
+    After  
+
+    ```
+    | nnoremap  | buffer | silent | Plug |
+    | nnoremap  | buffer | silent | Plug |
+    | nnoremap  | buffer | silent | Plug |
+    | vnoremap  | buffer | silent | Plug |
+    | vnoremap  | buffer | silent | Plug |
+    | vnoremap  | buffer | silent | Plug |
+    ```
+
++ :UnTable
+
+    Convert table to plain text.  
+    Delete alignment line, if it exists.  
+    Convert separator('|') to g:markdowntable_untablesymbol.  
+    Default convert to a space.  
 
     How to use:  
 
     ```
-    :ToTableAll [{symbols}]
+    :UnTable
     ```
 
     + Example
@@ -112,32 +157,35 @@ You can use these commands on markdown file.
         Input  
 
         ```
-        :ToTableAll ; : <
+        :UnTable
         ```
 
-        Before  
+        Before
 
         ```
-        nnoremap ;buffer:silent<Plug
-        nnoremap ;buffer:silent<Plug
-        nnoremap ;buffer:silent<Plug
-        vnoremap ;buffer:silent<Plug
-        vnoremap ;buffer:silent<Plug
-        vnoremap ;buffer:silent<Plug
+        | nnoremap  | buffer | silent | Plug |
+        | nnoremap  | buffer | silent | Plug |
+        | nnoremap  | buffer | silent | Plug |
+        | vnoremap  | buffer | silent | Plug |
+        | vnoremap  | buffer | silent | Plug |
+        | vnoremap  | buffer | silent | Plug |
         ```
 
         After  
 
         ```
-        | nnoremap  | buffer | silent | Plug |
-        | nnoremap  | buffer | silent | Plug |
-        | nnoremap  | buffer | silent | Plug |
-        | vnoremap  | buffer | silent | Plug |
-        | vnoremap  | buffer | silent | Plug |
-        | vnoremap  | buffer | silent | Plug |
+        nnoremap ;buffer:silent<Plug
+        nnoremap ;buffer:silent<Plug
+        nnoremap ;buffer:silent<Plug
+        vnoremap ;buffer:silent<Plug
+        vnoremap ;buffer:silent<Plug
+        vnoremap ;buffer:silent<Plug
         ```
 
 ### Mapping
+
+Disabled all mapping in default.  
+If you want to enable these mapping, define g:markdowntable_enablemap.  
 
 + \<Leader>tm
 
@@ -147,41 +195,51 @@ You can use these commands on markdown file.
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
     Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
-    You can disable default mapping to change g:markdowntable_disableMap.  
 
     ```
-    nmap <Space>tt <Plug>(Markdowntable_tablemake)
-    vmap <Space>tt <Plug>(Markdowntable_tablemake)
+    nmap <Space>tt <Plug>(markdowntable_tablemake)
+    vmap <Space>tt <Plug>(markdowntable_tablemake)
     ```
 
 + \<Leader>tt
 
     call :ToTable command.  
-    You can input symbols.  
+    You can input String.  
 
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
     Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
-    You can disable default mapping to change g:markdowntable_disableMap.  
 
     ```
-    nmap <Space>tt <Plug>(Markdowntable_totable)
-    vmap <Space>tt <Plug>(Markdowntable_totable)
+    nmap <Space>tt <Plug>(markdowntable_totable)
+    vmap <Space>tt <Plug>(markdowntable_totable)
     ```
 
 + \<Leader>ta
 
     call :ToTableAll command.  
-    You can input symbols.  
+    You can input String.  
 
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
     Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
-    You can disable default mapping to change g:markdowntable_disableMap.  
 
     ```
-    nmap <Space>ta <Plug>(Markdowntable_totableall)
-    vmap <Space>ta <Plug>(Markdowntable_totableall)
+    nmap <Space>ta <Plug>(markdowntable_totableall)
+    vmap <Space>ta <Plug>(markdowntable_totableall)
+    ```
+
++ \<Leader>tu
+
+    call :UnTable command.  
+
+    You can change default key mapping on your <code>.vimrc</code>.  
+    If you only use mapping in markdown file.
+    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
+
+    ```
+    nmap <Space>tu <Plug>(markdowntable_untable)
+    vmap <Space>tu <Plug>(markdowntable_untable)
     ```
 
 ## Customize
@@ -197,57 +255,62 @@ You can use these commands on markdown file.
     Example: set 8 spaces.
 
     ```
-    g:markdowntable_cellSpaces = 8
+    g:markdowntable_cellspaces = 8
     ```
 
-+ Symbol priorities of :ToTable and :ToTableAll command
++ Change String priorities of :ToTable and :ToTableAll command
 
-    You can customize which symbol is to convert by this variable.  
-    Set symbol priorities by list,left value is higher than right.  
+    You can customize which String is to convert by this variable.  
+    Set String priorities by list,left value is higher than right.  
     By default, this variable is set below.  
 
     ```
-    let g:markdowntable_symbolPriority = [';', ':', ',', '.']
+    let g:markdowntable_Stringpriority = [';', ':', ',', '.']
     ```
 
-    You can set own priorities of symbol by variable.  
+    You can set own priorities of String by variable.  
 
     Example: set priority '|' → ',' → '.'  
 
     ```
-    let g:markdowntable_symbolPriority = ['|', ',', '.']  
+    let g:markdowntable_Stringpriority = ['|', ',', '.']  
     ```
 
-+ Make header or no header always when use :ToTable and :ToTableAll mapping
++ Don't make alinment line always when use mapping of :ToTable and :ToTableAll
 
-    If you want to make header always in mapping of :ToTable or :ToTableAll, You can set this value true(not zero) to make header always.  
+    If you don't want to make alignment line,set this variable to true.  
     Default: false(0)  
 
     Example:  
 
     ```
-    let g:markdowntable_toTableHeader = 1
+    let g:markdowntable_noalign = 1
     ```
 
-+ Disable default mapping
++ Enable default mapping
 
-    You can define this variable to disable all default mappings.  
+    You can define this variable to enable all default mappings.  
 
     Example:  
 
     ```
-    let g:markdowntable_disableMap = 1
+    let g:markdowntable_enablemap = 1
+    ```
+
++ Want to convert separator to specific String
+
+    You can change convert separator('|') to specific char by define this variable.  
+    Default: ' ' (space)  
+
+    Example:  
+
+    ```
+    let g:markdowntable_untableString = ','
     ```
 
 ## Todo
 
 Implement list in the future.  
-
-+ Add :UnTable command
-
-    This command is opposite operation by :ToTable.  
-    Convert table to plain text.  
-    This command will be a part of :ToggleTable.  
 
 + Add :ToggleTable command and mapping
 

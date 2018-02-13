@@ -42,12 +42,12 @@ Command~
 
                                                                     *:ToTable*
 
-:ToTable [{Strings}]
+:ToTable [{String}...]
 
     Convert plain text to markdown table.
     Recognize which String to convert to separator('|') 
-    by |g:StringPriority| or {Strings}.
-    You can type {Strings} as list to which String is separator manually.
+    by |g:StringPriority| or {String}.
+    You can type {String} as list to which String is separator manually.
     Recognize first line as table header and add alignment line.
     Adjust indents and delete empty lines automatically.
     Don't want to make alignment line.Use this command with bang('|')
@@ -55,12 +55,16 @@ Command~
     Note
     If you set String manually, don't use |g:StringPriority|.
     If the String is't separator('|'),this command escape separator('|').
+    You can use regular expression of 'nomagic'(\M) in {String}.
+    nomagic example: \[] \(\) \| \. \+
+    See also |'nomagic'|.
+
     How it works:
     Counting each String and recognize the most String is separator each line.
 
                                                                  *:ToTableAll*
 
-:ToTableAll [{Strings}]
+:ToTableAll [{String}...]
 
     This command is almost all same as |:ToTable| command.See also |:ToTable|.
     A differ is convert all String to separator('|').

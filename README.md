@@ -56,8 +56,8 @@ You can use these commands on markdown file.
 + ToTable
 
 Convert plain text to markdown table.  
-Recognize which symbol to convert to separator(|) by g:symbolPriority.  
-You can type {symbols} as list to select which symbol is separator manually.  
+Recognize which String to convert to separator(|) by g:StringPriority.  
+You can type {String} as list to select which String is separator manually.  
 Recognize first line as header and add alignment line.  
 If you use this command with bang(!), don't make alignment line.
 Adjust indents automatically.and delete empty lines.  
@@ -65,7 +65,7 @@ Adjust indents automatically.and delete empty lines.
 How to use:  
 
 ```
-:ToTable [{symbols}]
+:ToTable [{String}...]
 ```
 
     + Example
@@ -99,14 +99,14 @@ How to use:
 
 + ToTableAll
 
-Convert plain text to table.  
-A differs from all symbol convert to separator(|) in terms of :ToTable.  
+Convert plain text to markdown table.  
+A differs from all String convert to separator(|) in terms of :ToTable.  
 Other thing is same as :ToTable.  
 
 How to use:  
 
 ```
-:ToTableAll [{symbols}]
+:ToTableAll [{String}...]
 ```
 
     + Example
@@ -132,6 +132,7 @@ How to use:
 
     ```
     | nnoremap  | buffer | silent | Plug |
+    | ---- | ---- | ---- | ---- |
     | nnoremap  | buffer | silent | Plug |
     | nnoremap  | buffer | silent | Plug |
     | vnoremap  | buffer | silent | Plug |
@@ -143,7 +144,7 @@ How to use:
 
     Convert table to plain text.  
     Delete alignment line, if it exists.  
-    Convert separator('|') to g:markdowntable_untablesymbol.  
+    Convert separator('|') to g:markdowntable_untableString.  
     Default convert to a space.  
 
     How to use:  
@@ -319,6 +320,11 @@ Implement list in the future.
     :ToTable mappping is deleted and change to this command mapping when this command added.  
     Mapping is deleted but,:ToTable command is available.  
     This command is implemented after :UnTable command.  
+
++ Delete empty cell automatically
+
+    Delete empty cell such as '|  |' in all table commands automatically.  
+    All table commands - :ToTable,:ToTableAll,:UnTable(,:ToggleTable).  
 
 + Movement mapping for table
 

@@ -23,6 +23,9 @@ endif
 if !exists(':UnTable')
     command! -nargs=? -bang -range -buffer UnTable call markdowntable#UnTable('v',<line1>,<line2>,<q-args>)
 endif
+if !exists(':ToggleTable')
+    command! -nargs=? -bang -range -buffer UnTable call markdowntable#ToggleTable('v',<line1>,<line2>,<q-args>)
+endif
 
 nnoremap <buffer><silent> <Plug>(markdowntable_tablemake) :<C-u>set opfunc=markdowntable#TableMake<Bar>exe 'norm! '.v:count1.'g@_'<CR>
 nnoremap <buffer><silent> <Plug>(markdowntable_totable) :<C-u>set opfunc=markdowntable#ToTableOp<CR>g@
@@ -32,6 +35,8 @@ vnoremap <buffer><silent> <Plug>(markdowntable_totable) :<C-u>call markdowntable
 vnoremap <buffer><silent> <Plug>(markdowntable_totableall) :<C-U>call markdowntable#ToTable('l','All',line("'<"),line("'>"))<CR>
 nnoremap <buffer><silent> <Plug>(markdowntable_untable) :<C-u>call markdowntable#UnTableOp<CR>g@
 vnoremap <buffer><silent> <Plug>(markdowntable_untable) :<C-u>call markdowntable#UnTable('l',line("'<"),line("'>"))<CR>
+nnoremap <buffer><silent> <Plug>(markdowntable_toggletable) :<C-u>call markdowntable#toggletableOp<CR>g@
+vnoremap <buffer><silent> <Plug>(markdowntable_toggletable) :<C-u>call markdowntable#toggletable('l',line("'<"),line("'>"))<CR>
 
 if exists('g:markdowntable_enableMap')
     if !hasmapto('<Plug>(markdowntable_tablemake)')
@@ -49,6 +54,10 @@ if exists('g:markdowntable_enableMap')
     if !hasmapto('<Plug>(markdowntable_untable)')
         nmap <buffer> <Leader>tu <Plug>(markdowntable_untable)
         vmap <buffer> <Leader>tu <Plug>(markdowntable_untable)
+    endif
+    if !hasmapto('<Plug>(markdowntable_toggletable)')
+        nmap <buffer> <Leader>tu <Plug>(markdowntable_toggletable)
+        vmap <buffer> <Leader>tu <Plug>(markdowntable_toggletable)
     endif
 endif
 

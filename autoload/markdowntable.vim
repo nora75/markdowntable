@@ -239,6 +239,64 @@ func! markdowntable#UnTable(type,...) abort
     call s:echored('UnTable works successfully')
 endfunc
 
+func! markdowntable#ToggleTable(type,...) abort
+    if a:type =~ '\M^l\|b\|c\.\+$'
+        if a:0 > 1
+            let [line1,line2] = [a:1,a:2]
+        else
+            let [line1,line2] = [line("'["),line("']")]
+        endif
+        let String = s:tableChar("Type only enter,If you don't want to set any String\nInput String")
+        if String == -1
+            return
+        elseif String !=# ''
+            if stridx(String,"\s") != -1 && stridx(String,"\s") != 0
+                let String = strcharpart(String,1,stridx(String,"\s"))
+            endif
+        endif
+    else
+        let [line1,line2] = [a:1,a:2]
+        if a:3 != ''
+            if stridx(a:3,"\s") != -1
+                let String = strcharpart(a:3,0,stridx(a:3,"\s"))
+            else
+                let String = a:3
+            endif
+        else
+            let String = g:markdowntable_untableString
+        endif
+    endif
+    let setline = []
+    let i = line1
+    while i <= line2
+        let k = getline(i)
+        if k =~ '\M\S\.\+'
+            break
+        endif
+        let i+=1
+    endwhile
+    let leftwhite = matchstr(getline(i),'\M^\s\+')
+    let curline = s:retText(i,String)
+    if curline !=# ''
+        call add(setline,curline)
+    endif
+    let curline = getline(i+1)
+    if curline !~ '\M^\s\*|\(\s\*:\?-\+:\?\s\*|\s\*\)\+$'
+        let curline = s:retText(i+1,String)
+        if curline !=# ''
+            call add(setline,curline)
+        endif
+    endif
+    for lnum in range(i+2,line2)
+        let curline = s:retText(lnum,String)
+        call add(setline,curline)
+    endfor
+    call map(setline,'leftwhite.v:val')
+    silent call append(line2,setline)
+    silent exe line1.','.line2.'delete _'
+    call s:echored('UnTable works successfully')
+endfunc
+
 func! s:echoWarn(msg)
     echohl WarnigMsg
     redraw!
@@ -400,6 +458,10 @@ endfunc
 
 func! markdowntable#UnTableOp(type,...) abort
     call markdowntable#UnTable('l')
+endfunc
+
+func! markdowntable#ToggleTableOP(type,...) abort
+    call markdowntable#ToggleTable('l')
 endfunc
 
 func! s:map(index,val) abort

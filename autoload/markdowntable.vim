@@ -391,7 +391,7 @@ func! s:changeTable(curline,String) abort
     elseif aflist[0] =~ '\M^\s|'
         let curline = strcharpart(curline,1,len(curline))
     endif
-    if aflist[-1] !~ '\M\[^\\]|$'
+    if aflist[-1] !~ '\M\[^\\]|\s$'
         let curline .= '|'
     elseif aflist[-1] =~ '\M\s$'
         let curline = strcharpart(curline,0,len(curline)-1)

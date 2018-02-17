@@ -298,7 +298,7 @@ func! markdowntable#ToggleTable(type,...) abort
 endfunc
 
 func! s:echoWarn(msg)
-    echohl WarnigMsg
+    echohl WarningMsg
     redraw!
     echomsg a:msg
     echohl None

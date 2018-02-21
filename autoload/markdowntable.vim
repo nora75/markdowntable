@@ -1,5 +1,5 @@
 " Vim global plugin for markdown table functions
-" Last Change: 2018 Jan 22
+" Last Change: 2018 Feb 21
 " Maintainer: NORA75
 " Licence: MIT
 " autoload
@@ -75,6 +75,7 @@ func! markdowntable#TableMake(type,...) abort
     endif
     silent call append(lnum,table)
     echo 'Created table,row:'.row.' column:'.column
+    return
 endfunc
 
 func! markdowntable#ToTable(type,...) abort
@@ -179,6 +180,7 @@ func! markdowntable#ToTable(type,...) abort
     silent call append(line2,setline)
     silent exe line1.','.line2.'delete _'
     call s:echored('ToTable'.mode.' works successfully')
+    return
 endfunc
 
 func! markdowntable#UnTable(type,...) abort
@@ -237,6 +239,7 @@ func! markdowntable#UnTable(type,...) abort
     silent call append(line2,setline)
     silent exe line1.','.line2.'delete _'
     call s:echored('UnTable works successfully')
+    return
 endfunc
 
 func! markdowntable#ToggleTable(type,...) abort
@@ -246,58 +249,19 @@ func! markdowntable#ToggleTable(type,...) abort
         else
             let [line1,line2] = [line("'["),line("']")]
         endif
-        let String = s:tableChar("Type only enter,If you don't want to set any String\nInput String")
-        if String == -1
-            return
-        elseif String !=# ''
-            if stridx(String,"\s") != -1 && stridx(String,"\s") != 0
-                let String = strcharpart(String,1,stridx(String,"\s"))
-            endif
-        endif
     else
         let [line1,line2] = [a:1,a:2]
-        if a:3 != ''
-            if stridx(a:3,"\s") != -1
-                let String = strcharpart(a:3,0,stridx(a:3,"\s"))
-            else
-                let String = a:3
-            endif
-        else
-            let String = g:markdowntable_untableString
-        endif
     endif
-    let setline = []
-    let i = line1
-    while i <= line2
-        let k = getline(i)
-        if k =~ '\M\S\.\+'
-            break
-        endif
-        let i+=1
-    endwhile
-    let leftwhite = matchstr(getline(i),'\M^\s\+')
-    let curline = s:retText(i,String)
-    if curline !=# ''
-        call add(setline,curline)
+    let c = s:count(line1,line2)
+    if c ==# 't'
+        call markdowntable#ToTable('l','',line1,line2)
+    elseif c ==# 'u'
+        call markdowntable#UnTable('l',line1,line2)
     endif
-    let curline = getline(i+1)
-    if curline !~ '\M^\s\*|\(\s\*:\?-\+:\?\s\*|\s\*\)\+$'
-        let curline = s:retText(i+1,String)
-        if curline !=# ''
-            call add(setline,curline)
-        endif
-    endif
-    for lnum in range(i+2,line2)
-        let curline = s:retText(lnum,String)
-        call add(setline,curline)
-    endfor
-    call map(setline,'leftwhite.v:val')
-    silent call append(line2,setline)
-    silent exe line1.','.line2.'delete _'
-    call s:echored('UnTable works successfully')
+    return
 endfunc
 
-func! s:echoWarn(msg)
+func! s:echoWarn(msg) abort
     echohl WarningMsg
     redraw!
     echomsg a:msg
@@ -305,7 +269,7 @@ func! s:echoWarn(msg)
     return -1
 endfunc
 
-func! s:echored(msg)
+func! s:echored(msg) abort
     echohl None
     redraw!
     echomsg a:msg
@@ -448,22 +412,6 @@ func! s:retText(lnum,String) abort
     return s:changeText(curline,a:String)
 endfunc
 
-func! markdowntable#ToTableOp(type,...) abort
-    call markdowntable#ToTable('l','')
-endfunc
-
-func! markdowntable#ToTableAll(type,...) abort
-    call markdowntable#ToTable('l','All')
-endfunc
-
-func! markdowntable#UnTableOp(type,...) abort
-    call markdowntable#UnTable('l')
-endfunc
-
-func! markdowntable#ToggleTableOP(type,...) abort
-    call markdowntable#ToggleTable('l')
-endfunc
-
 func! s:map(index,val) abort
     let val = a:val
     let val = s:remSpaces(val)
@@ -471,6 +419,47 @@ func! s:map(index,val) abort
         let val = ' '.val.' '
     endif
     return val
+endfunc
+
+func! s:count(line1,line2) abort
+    let i = a:line1
+    let j = 0
+    while i <= a:line2
+        let k = getline(i)
+        if k =~? '\M^\s\*|\.\*|\s\*$'
+            let j += 1
+        elseif k =~? '\M^\s\*|\(\s\*:\?-\+:\?\s\*|\s\*\)\+$'
+            return 'u'
+        else
+            let j -= 1
+        endif
+        let i += 1
+    endwhile
+    if j >= 0
+        return 'u'
+    else
+        return 't'
+    endif
+endfunc
+
+func! markdowntable#ToTableOp(type,...) abort
+    call markdowntable#ToTable('l','')
+    return
+endfunc
+
+func! markdowntable#ToTableAll(type,...) abort
+    call markdowntable#ToTable('l','All')
+    return
+endfunc
+
+func! markdowntable#UnTableOp(type,...) abort
+    call markdowntable#UnTable('l')
+    return
+endfunc
+
+func! markdowntable#ToggleTableOP(type,...) abort
+    call markdowntable#ToggleTable('l')
+    return
 endfunc
 
 let &cpo = s:savecpo

@@ -1,5 +1,5 @@
 *markdowntable.txt* Plugin for markdown table
-" Last Change: 2018 Jan 22
+" Last Change: 2018 Feb 22
 " Maintainer: NORA75
 " Licence: MIT
 --------------------------------------------------------------------------------
@@ -82,6 +82,14 @@ Command~
     Convert separator('|') to |g:markdowntable_untableString|.
     Default convert to a space.
 
+                                                                *:ToggleTable*
+:ToggleTable
+
+    Convert table to plain text or plain text to table.
+    Use :ToTable if lines are table or use :UnTable if plain text.
+    If you use this mapping,this command waits user's input in command-line.
+    See also |:ToTable| and |:UnTable|.
+
 --------------------------------------------------------------------------------
                                                        *markdowntable-mapping*
 Mapping~
@@ -106,16 +114,16 @@ Mapping~
 
 <Leader>tt
 
-    Trigger to call |:ToTable|.
-    Convert selected or current line to table.
+    Trigger to call |:ToggleTable|.
+    Convert selected or current line to table or plain text.
     If you use this mapping,this command waits user's input in command-line.
-    If you only type enter,this command use |g:StringPriority|.
+    If you only type enter,this command use |g:StringPriority| of |g:UnTable.
     You can change default key mapping on your .vimrc.
 
     Example:
     >
-        nmap <Space>tt <Plug>(markdowntable_totable)
-        vmap <Space>tt <Plug>(markdowntable_totable)
+        nmap <Space>tt <Plug>(markdowntable_toggletable)
+        vmap <Space>tt <Plug>(markdowntable_toggletable)
 <
     Note
     You can repeat this mapping by dot.But you'll have to set Strings again.
@@ -152,9 +160,9 @@ Mapping~
                                                      *markdowntable-variables*
 Variables~
 
-                                                               *g:cell_spaces*
+                                                 *g:markdowntable_cell_spaces*
 
-g:cell_spaces
+g:markdowntable_cell_spaces
 
     Default value is 4.
     This value change spaces amount in the cell for :TableMake.
@@ -166,26 +174,26 @@ g:cell_spaces
 
     Example:
     >
-        let g:cell_spaces = 8
+        let g:markdowntable_cell_spaces = 8
 <
-                                                            *g:Stringpriority*
+                                              *g:markdowntable_Stringpriority*
 
-g:Stringpriority
+g:markdowntable_Stringpriority
 
     This variable is used for |:ToTable| and |:ToTableAll|.
     By default, this variable sets this.
     >
-        let g:StringPriority = [',', ':', ';', '.']
+        let g:markdowntable_StringPriority = [',', ':', ';', '.']
 <
     You can set own priorities of String by variable.  
 
     Example: set priority '|' → ',' → '.'  
 
     >
-        let g:StringPriority = ['|', ',', '.']  
+        let g:markdowntable_StringPriority = ['|', ',', '.']  
 <
 
-                                               *g:markdowntable_totableheader*
+                                                     *g:markdowntable_noalign*
 g:markdowntable_noalign
 
     If you want not to make alignment line always in mapping of 
@@ -198,7 +206,7 @@ g:markdowntable_noalign
         let g:markdowntable_noalign = 1
         let g:markdowntable_noalign = v:true
 <
-                                                  *g:markdowntable_enablemap*
+                                                   *g:markdowntable_enablemap*
 g:markdowntable_enablemap
 
     If you define this variable, enable all default mapping.

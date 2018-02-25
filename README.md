@@ -183,6 +183,13 @@ How to use:
         vnoremap ;buffer:silent<Plug
         ```
 
++ :ToggleTable
+
+    This command can toggle table.  
+    Convert table to plain text,and plain text to table.  
+
+    Note: This command count table or plain text lines of selected and decide to convert to table or plain text.  
+
 ### Mapping
 
 Disabled all mapping in default.  
@@ -192,7 +199,6 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
 
     call :TableMake command.  
     You can input row and column.  
-
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
     Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
@@ -202,25 +208,10 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     vmap <Space>tt <Plug>(markdowntable_tablemake)
     ```
 
-+ \<Leader>tt
-
-    call :ToTable command.  
-    You can input String.  
-
-    You can change default key mapping on your <code>.vimrc</code>.  
-    If you only use mapping in markdown file.
-    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
-
-    ```
-    nmap <Space>tt <Plug>(markdowntable_totable)
-    vmap <Space>tt <Plug>(markdowntable_totable)
-    ```
-
 + \<Leader>ta
 
     call :ToTableAll command.  
     You can input String.  
-
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
     Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
@@ -233,7 +224,6 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
 + \<Leader>tu
 
     call :UnTable command.  
-
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
     Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
@@ -241,6 +231,19 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     ```
     nmap <Space>tu <Plug>(markdowntable_untable)
     vmap <Space>tu <Plug>(markdowntable_untable)
+    ```
+
++ \<Leader>tt
+
+    call :ToggleTable command.  
+
+    You can change default key mapping on your <code>.vimrc</code>.  
+    If you only use mapping in markdown file.
+    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
+
+    ```
+    nmap <Space>tt <Plug>(markdowntable_toggletable)
+    vmap <Space>tt <Plug>(markdowntable_toggletable)
     ```
 
 ## Customize
@@ -312,14 +315,6 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
 ## Todo
 
 Implement list in the future.  
-
-+ Add :ToggleTable command and mapping
-
-    This command can toggle table.  
-    Convert table to sentence,and sentence to table.  
-    :ToTable mappping is deleted and change to this command mapping when this command added.  
-    Mapping is deleted but,:ToTable command is available.  
-    This command is implemented after :UnTable command.  
 
 + Delete empty cell automatically
 

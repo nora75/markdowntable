@@ -1,5 +1,5 @@
 " Vim global plugin for markdown table functions
-" Last Change: 2018 Feb 21
+" Last Change: 2018 March 21
 " Maintainer: NORA75
 " Licence: MIT
 " autoload
@@ -118,35 +118,27 @@ func! markdowntable#ToTable(type,...) abort
         endif
         let i+=1
     endwhile
-    let leftwhite = matchstr(getline(i),'\M^\s\+')
+    let leftwhite = matchstr(k,'\M^\s\+')
     if mode ==# 'All'
         let StringP = sort(StringP)
         let StringP = uniq(StringP)
         let hasSep = count(StringP,'|')
-        if hasSep == 0
+        if hasSep
             call remove(StringP,index(StringP,'|'))
         endif
-        for lnum in range(i,line2)
-            let curline = getline(lnum)
-            let curline = s:remSpaces(curline)
-            if curline ==# ''
-                continue
-            endif
-            if hasSep == 0
-                let curline = s:escapeSep(curline)
-            endif
-            for String in StringP
-                let curline = s:changeTable(curline,String)
-            endfor
-            call add(setline,curline)
-        endfor
+        let s:StringP = deepcopy(StringP)
+        let setline = getline(i,line2)
+        call filter(setline,'v:val != ''''')
+        call map(setline,function('s:remSpaces'))
+        if !hasSep
+            call map(setline,function('s:escapeSep'))
+        endif
+        call map(setline,function('s:changeTableA'))
     else
-        for lnum in range(i,line2)
-            let curline = getline(lnum)
-            let curline = s:remSpaces(curline)
-            if curline ==# ''
-                continue
-            endif
+        let setline = getline(i,line2)
+        call filter(setline,'v:val != ''''')
+        call map(setline,function('s:remSpaces'))
+        for curline in setline
             let aflist = split(curline,'\M\[^\\]\zs\|\\\.\zs')
             let StringDetect = []
             for String in StringP
@@ -162,9 +154,9 @@ func! markdowntable#ToTable(type,...) abort
                 let curline = s:escapeSep(curline)
             endif
             let curline = s:changeTable(curline,String)
-            call add(setline,curline)
         endfor
     endif
+    call map(setline,function('s:appendBar'))
     if bang && i != line2 && len(setline) != 0
         let bars = ' '.repeat('-',g:markdowntable_cellspaces).' |'
         let j = 0
@@ -219,7 +211,7 @@ func! markdowntable#UnTable(type,...) abort
         endif
         let i+=1
     endwhile
-    let leftwhite = matchstr(getline(i),'\M^\s\+')
+    let leftwhite = matchstr(k,'\M^\s\+')
     let curline = s:retText(i,String)
     if curline !=# ''
         call add(setline,curline)
@@ -301,12 +293,17 @@ func! s:getChar() abort
     return c
 endfunc
 
-func! s:remSpaces(line) abort
-    let curline = matchstr(a:line,'\M\S\.\*')
+func! s:remSpaces(...) abort
+    if a:0 > 1
+        let curline = a:2
+    else
+        let curline = a:1
+    endif
+    let curline = matchstr(curline,'\M\S\.\*')
     if curline == ''
         return ''
     elseif curline =~ '\M\s\*$'
-        let ridx = matchend(curline,'\M\s\*$')
+        let ridx = match(curline,'\M\s\*$')
     else
         let ridx = len(curline)
     endif
@@ -342,29 +339,45 @@ func! s:changeTable(curline,String) abort
     let curline = a:curline
     let aflist = split(curline,'\M\[^\\]\zs'.a:String.'\ze')
     let k = 0
-    while k < len(aflist)
-        if aflist[k] =~# '\M\\'.a:String && a:String != '|'
-            let aflist[k] = substitute(aflist[k],'\M\\\('.a:String.'\)','\=submatch(1)','g')
-        endif
-        let k += 1
-    endwhile
+    if len(aflist) > 1
+        while k < len(aflist)
+            if aflist[k] =~# '\M\\'.a:String && a:String != '|'
+                let aflist[k] = substitute(aflist[k],'\M\\\('.a:String.'\)','\=submatch(1)','g')
+            endif
+            let k += 1
+        endwhile
+    endif
     call map(aflist,function('s:map'))
     let curline = join(aflist,'|')
-    if aflist[0] !~ '\M^|\s'
-        let curline = '|'.curline
-    elseif aflist[0] =~ '\M^\s|'
-        let curline = strcharpart(curline,1,len(curline))
-    endif
-    if aflist[-1] !~ '\M\[^\\]|\s$'
-        let curline .= '|'
-    elseif aflist[-1] =~ '\M\s$'
-        let curline = strcharpart(curline,0,len(curline)-1)
-    endif
     let curline = s:remSpaces(curline)
     return curline
 endfunc
 
-func! s:escapeSep(curline) abort
+func! s:changeTableA(in,curline) abort
+    let curline = a:curline
+    for s in s:StringP
+        let curline = s:changeTable(curline,s)
+    endfor
+    return curline
+endfunc
+
+func! s:escapeSep(...) abort
+    if a:0 > 1
+        let aflist = a:2
+    else
+        let aflist = a:1
+    endif
+    let aflist = split(aflist,'\M\[^\\|]\+\zs\|\(\\\.\zs\)\||\zs')
+    let k = 0
+    while k < len(aflist)
+        if aflist[k] == '|'
+            let aflist[k] = '\|'
+        endif
+        let k += 1
+    endwhile
+    return join(aflist,'')
+endfunc
+func! s:escapeSepa(in,curline) abort
     let aflist = split(a:curline,'\M\[^\\|]\+\zs\|\(\\\.\zs\)\||\zs')
     let k = 0
     while k < len(aflist)
@@ -440,6 +453,21 @@ func! s:count(line1,line2) abort
     else
         return 't'
     endif
+endfunc
+
+func! s:appendBar(...) abort
+    let curline = a:2
+    if curline =~ '\M^|\[^ ]'
+        let curline = '| '.strcharpart(curline,1,len(curline))
+    elseif curline !~ '\M^|\s'
+        let curline = '| '.curline
+    endif
+    if curline =~ '\M\[^ ]|$'
+        let curline = strcharpart(curline,0,len(curline)-1).' |'
+    elseif curline !~ '\M\s|$'
+        let curline .= ' |'
+    endif
+    return curline
 endfunc
 
 func! markdowntable#ToTableOp(type,...) abort

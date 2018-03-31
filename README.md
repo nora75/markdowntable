@@ -27,7 +27,6 @@ You can use these commands on markdown file.
 
     Make empty table.  
     You can set how many rows and columns.  
-    In visual-mode, delete selected a
     In visual-mode.delete select area and make empty table.  
 
     How to use:  

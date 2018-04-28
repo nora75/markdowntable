@@ -54,90 +54,90 @@ You can use these commands on markdown file.
 
 + ToTable
 
-Convert plain text to markdown table.  
-Recognize which String to convert to separator(|) by g:StringPriority.  
-You can type {String} as list to select which String is separator manually.  
-Recognize first line as header and add alignment line.  
-If you use this command with bang(!), don't make alignment line.
-Adjust indents automatically.and delete empty lines.  
+    Convert plain text to markdown table.  
+    Recognize which String to convert to separator(|) by g:markdowntable_stringpriority.  
+    You can type {String} as list to select which String is separator manually.  
+    Recognize first line as header and add alignment line.  
+    Adjust indents automatically.and delete empty lines.  
+    If you use this command with bang(!), don't make alignment line.  
 
-How to use:  
+    How to use:  
 
-```
-:ToTable [{String}...]
-```
+    ```
+    :ToTable [{String}...]
+    ```
 
     + Example
 
-    Input  
-    <code>:ToTable \s</code> with select area.
+        Input  
+        <code>:ToTable \s</code> with select area.
 
-    Before  
+        Before  
 
-    ```
-    nnoremap <buffer><silent> <Plug>
-    nnoremap <buffer><silent> <Plug>
-    nnoremap <buffer><silent> <Plug>
-    vnoremap <buffer><silent> <Plug>
+        ```
+        nnoremap <buffer><silent> <Plug>
+        nnoremap <buffer><silent> <Plug>
+        nnoremap <buffer><silent> <Plug>
+        vnoremap <buffer><silent> <Plug>
 
-    vnoremap <buffer><silent> <Plug>
-    vnoremap <buffer><silent> <Plug>
-    ```
+        vnoremap <buffer><silent> <Plug>
+        vnoremap <buffer><silent> <Plug>
+        ```
 
-    After  
+        After  
 
-    ```
-    | nnoremap | <buffer><silent> | <Plug> |
-    | ---- | ---- | ---- |
-    | nnoremap | <buffer><silent> | <Plug> |
-    | nnoremap | <buffer><silent> | <Plug> |
-    | vnoremap | <buffer><silent> | <Plug> |
-    | vnoremap | <buffer><silent> | <Plug> |
-    | vnoremap | <buffer><silent> | <Plug> |
-    ```
+        ```
+        | nnoremap | <buffer><silent> | <Plug> |
+        | ---- | ---- | ---- |
+        | nnoremap | <buffer><silent> | <Plug> |
+        | nnoremap | <buffer><silent> | <Plug> |
+        | vnoremap | <buffer><silent> | <Plug> |
+        | vnoremap | <buffer><silent> | <Plug> |
+        | vnoremap | <buffer><silent> | <Plug> |
+        ```
 
 + ToTableAll
 
-Convert plain text to markdown table.  
-A differs from all String convert to separator(|) in terms of :ToTable.  
-Other thing is same as :ToTable.  
+    Convert plain text to markdown table.  
+    A differs from all String convert to separator(|) in terms of :ToTable.  
+    Other thing is same as :ToTable.  
 
-How to use:  
+    How to use:  
 
-```
-:ToTableAll [{String}...]
-```
+    ```
+    :ToTableAll [{String}...]
+    ```
 
     + Example
 
-    Input  
+        Input  
 
-    ```
-    :ToTableAll ; : <
-    ```
+        ```
+        :ToTableAll ; : <
+        ```
 
-    Before  
+        Before  
 
-    ```
-    nnoremap ;buffer:silent<Plug
-    nnoremap ;buffer:silent<Plug
-    nnoremap ;buffer:silent<Plug
-    vnoremap ;buffer:silent<Plug
-    vnoremap ;buffer:silent<Plug
-    vnoremap ;buffer:silent<Plug
-    ```
+        ```
+        nnoremap ;buffer:silent<Plug
+        nnoremap ;buffer:silent<Plug
+        nnoremap ;buffer:silent<Plug
+        vnoremap ;buffer:silent<Plug
+        vnoremap ;buffer:silent<Plug
+        vnoremap ;buffer:silent<Plug
+        ```
 
-    After  
+        After  
 
-    ```
-    | nnoremap  | buffer | silent | Plug |
-    | ---- | ---- | ---- | ---- |
-    | nnoremap  | buffer | silent | Plug |
-    | nnoremap  | buffer | silent | Plug |
-    | vnoremap  | buffer | silent | Plug |
-    | vnoremap  | buffer | silent | Plug |
-    | vnoremap  | buffer | silent | Plug |
-    ```
+        ```
+        | nnoremap  | buffer | silent | Plug |
+        | ---- | ---- | ---- | ---- |
+        | nnoremap  | buffer | silent | Plug |
+        | nnoremap  | buffer | silent | Plug |
+        | vnoremap  | buffer | silent | Plug |
+        | vnoremap  | buffer | silent | Plug |
+        | vnoremap  | buffer | silent | Plug |
+        ```
 
 + :UnTable
 
@@ -187,7 +187,7 @@ How to use:
     This command can toggle table.  
     Convert table to plain text,and plain text to table.  
 
-    Note: This command count table or plain text lines of selected and decide to convert to table or plain text.  
+    Note: This command decide to convert to table or plain text by counting which is more table or plain text lines of selected.  
 
 ### Mapping
 
@@ -200,7 +200,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     You can input row and column.  
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
-    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
+    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use \<buffer> option.  
 
     ```
     nmap <Space>tt <Plug>(markdowntable_tablemake)
@@ -213,7 +213,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     You can input String.  
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
-    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
+    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use \<buffer> option.  
 
     ```
     nmap <Space>ta <Plug>(markdowntable_totableall)
@@ -225,7 +225,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     call :UnTable command.  
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
-    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
+    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use \<buffer> option.  
 
     ```
     nmap <Space>tu <Plug>(markdowntable_untable)
@@ -238,7 +238,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
 
     You can change default key mapping on your <code>.vimrc</code>.  
     If you only use mapping in markdown file.
-    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use <buffer> option.  
+    Use filetype-plugin or autocommand in your <code>.vimrc</code> and use \<buffer> option.  
 
     ```
     nmap <Space>tt <Plug>(markdowntable_toggletable)
@@ -268,7 +268,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     By default, this variable is set below.  
 
     ```
-    let g:markdowntable_Stringpriority = [';', ':', ',', '.']
+    let g:markdowntable_stringpriority = [';', ':', ',', '.', '|']
     ```
 
     You can set own priorities of String by variable.  
@@ -276,7 +276,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     Example: set priority '|' → ',' → '.'  
 
     ```
-    let g:markdowntable_Stringpriority = ['|', ',', '.']  
+    let g:markdowntable_stringpriority = ['|', ',', '.']  
     ```
 
 + Don't make alinment line always when use mapping of :ToTable and :ToTableAll
@@ -308,7 +308,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     Example:  
 
     ```
-    let g:markdowntable_untableString = ','
+    let g:markdowntable_untablestring = ','
     ```
 
 ## Todo
@@ -326,8 +326,6 @@ Implement list in the future.
     When cursor is on the table,move to the header or alignment-line of current row.  
 
 + Add auto adjust cell amount to maximum row.  
-
-+ Support repeat.vim?
 
 + Syntax-highlighting
 

@@ -46,14 +46,14 @@ Command~
 
     Convert plain text to markdown table.
     Recognize which String to convert to separator('|') 
-    by |g:StringPriority| or {String}.
+    by |g:markdowntable_stringpriority| or {String}.
     You can type {String} as list to which String is separator manually.
     Recognize first line as table header and add alignment line.
     Adjust indents and delete empty lines automatically.
     Don't want to make alignment line.Use this command with bang('|')
 
     Note
-    If you set String manually, don't use |g:StringPriority|.
+    If you set String manually, don't use |g:markdowntable_stringpriority|.
     If the String is't separator('|'),this command escape separator('|').
     You can use regular expression of 'nomagic'(\M) in {String}.
     nomagic example: \[] \(\) \| \. \+
@@ -79,7 +79,7 @@ Command~
 
     Convert table to plain text.
     Delete alignment line, if it exists.
-    Convert separator('|') to |g:markdowntable_untableString|.
+    Convert separator('|') to |g:markdowntable_untablestring|.
     Default convert to a space.
 
                                                                 *:ToggleTable*
@@ -117,7 +117,7 @@ Mapping~
     Trigger to call |:ToggleTable|.
     Convert selected or current line to table or plain text.
     If you use this mapping,this command waits user's input in command-line.
-    If you only type enter,this command use |g:StringPriority| of |g:UnTable.
+    If you only type enter,this command use |g:markdowntable_stringpriority| of |g:UnTable|.
     You can change default key mapping on your .vimrc.
 
     Example:
@@ -176,23 +176,22 @@ g:markdowntable_cell_spaces
     >
         let g:markdowntable_cell_spaces = 8
 <
-                                              *g:markdowntable_Stringpriority*
+                                              *g:markdowntable_strign_priority*
 
-g:markdowntable_Stringpriority
+g:markdowntable_stringpriority
 
     This variable is used for |:ToTable| and |:ToTableAll|.
     By default, this variable sets this.
     >
-        let g:markdowntable_StringPriority = [',', ':', ';', '.']
+        let g:markdowntable_strign_priority = ['|', ';', ':', ',', '.']
 <
     You can set own priorities of String by variable.  
 
     Example: set priority '|' → ',' → '.'  
 
     >
-        let g:markdowntable_StringPriority = ['|', ',', '.']  
+        let g:markdowntable_strign_priority = ['|', ',', '.']  
 <
-
                                                      *g:markdowntable_noalign*
 g:markdowntable_noalign
 
@@ -216,8 +215,8 @@ g:markdowntable_enablemap
         let g:markdowntable_enablemap = 1
         let g:markdowntable_enablemap = v:true
 <
-                                               *g:markdowntable_untableString*
-g:markdowntable_untableString
+                                               *g:markdowntable_untablestring*
+g:markdowntable_untablestring
 
     You can change convert separator('|') to specific char by define this 
     variable.
@@ -225,7 +224,7 @@ g:markdowntable_untableString
 
     Example:
     >
-        let g:markdowntable_untableString = ','
+        let g:markdowntable_untablestring = ','
 <
 --------------------------------------------------------------------------------
 vim:tw=78:ts=8:ft=help:norl:

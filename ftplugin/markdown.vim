@@ -35,8 +35,8 @@ vnoremap <buffer><silent> <Plug>(markdowntable_totable) :<C-u>call markdowntable
 vnoremap <buffer><silent> <Plug>(markdowntable_totableall) :<C-U>call markdowntable#ToTable('l','All',line("'<"),line("'>"))<CR>
 nnoremap <buffer><silent> <Plug>(markdowntable_untable) :<C-u>call markdowntable#UnTableOp<CR>g@
 vnoremap <buffer><silent> <Plug>(markdowntable_untable) :<C-u>call markdowntable#UnTable('l',line("'<"),line("'>"))<CR>
-nnoremap <buffer><silent> <Plug>(markdowntable_toggletable) :<C-u>call markdowntable#toggletableOp<CR>g@
-vnoremap <buffer><silent> <Plug>(markdowntable_toggletable) :<C-u>call markdowntable#toggletable('l',line("'<"),line("'>"))<CR>
+nnoremap <buffer><silent> <Plug>(markdowntable_toggletable) :<C-u>set opfunc=markdowntable#ToggleTableOp<CR>g@
+vnoremap <buffer><silent> <Plug>(markdowntable_toggletable) :<C-u>call markdowntable#ToggleTable('l',line("'<"),line("'>"))<CR>
 
 if exists('g:markdowntable_enableMap')
     if !hasmapto('<Plug>(markdowntable_tablemake)')

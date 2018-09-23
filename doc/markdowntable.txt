@@ -46,14 +46,14 @@ Command~
 
     Convert plain text to markdown table.
     Recognize which String to convert to separator('|') 
-    by |g:markdowntable_stringpriority| or {String}.
+    by |g:markdowntable_string_priority| or {String}.
     You can type {String} as list to which String is separator manually.
     Recognize first line as table header and add alignment line.
     Adjust indents and delete empty lines automatically.
     Don't want to make alignment line.Use this command with bang('|')
 
     Note
-    If you set String manually, don't use |g:markdowntable_stringpriority|.
+    If you set String manually, don't use |g:markdowntable_string_priority|.
     If the String is't separator('|'),this command escape separator('|').
     You can use regular expression of 'nomagic'(\M) in {String}.
     nomagic example: \[] \(\) \| \. \+
@@ -112,12 +112,13 @@ Mapping~
     You can repeat this mapping by dot.But you are going to 
     set row and column again.
 
-<Leader>tt
+<Leader>tt{motion}
 
     Trigger to call |:ToggleTable|.
     Convert selected or current line to table or plain text.
     If you use this mapping,this command waits user's input in command-line.
-    If you only type enter,this command use |g:markdowntable_stringpriority| of |g:UnTable|.
+    If you only type enter,this command use |g:markdowntable_string_priority| of |g:UnTable|.
+    You don't need to input {motion} in visual mode.
     You can change default key mapping on your .vimrc.
 
     Example:
@@ -128,10 +129,10 @@ Mapping~
     Note
     You can repeat this mapping by dot.But you'll have to set Strings again.
 
-<Leader>ta
+<Leader>ta{motion}
 
     Trigger to call |:ToTableAll|.
-    Same as |:ToTable| mapping.
+    Same as |<leader>tt| mapping.
     You can change default key mapping on your .vimrc.
 
     Example:
@@ -142,7 +143,7 @@ Mapping~
     Note
     You can repeat this mapping by dot.But you'll have to set Strings again.
 
-<Leader>tu
+<Leader>tu{motion}
 
     Trigger to call |:UnTable|.
     You can change default key mapping on your .vimrc.
@@ -178,19 +179,19 @@ g:markdowntable_cell_spaces
 <
                                               *g:markdowntable_strign_priority*
 
-g:markdowntable_stringpriority
+g:markdowntable_string_priority
 
     This variable is used for |:ToTable| and |:ToTableAll|.
     By default, this variable sets this.
     >
-        let g:markdowntable_strign_priority = ['|', ';', ':', ',', '.']
+        let g:markdowntable_string_priority = [';', ':', ',', '.', '|']
 <
     You can set own priorities of String by variable.  
 
     Example: set priority '|' → ',' → '.'  
 
     >
-        let g:markdowntable_strign_priority = ['|', ',', '.']  
+        let g:markdowntable_string_priority = ['|', ',', '.']  
 <
                                                      *g:markdowntable_noalign*
 g:markdowntable_noalign

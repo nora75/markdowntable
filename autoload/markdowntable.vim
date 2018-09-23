@@ -11,18 +11,6 @@ endif
 let g:loaded_markdowntable = 1
 let s:savecpo = &cpo
 set cpo&vim
-if !exists('g:markdowntable_cellspaces')
-    let g:markdowntable_cellspaces = 4
-endif
-if !exists('g:markdowntable_stringpriority')
-    let g:markdowntable_stringpriority = [';',':',',','.','|',' ']
-endif
-if !exists('g:markdowntable_noalign')
-    let g:markdowntable_noalign = 1
-endif
-if !exists('g:markdowntable_untablestring')
-    let g:markdowntable_untablestring = ' '
-endif
 
 func! markdowntable#TableMake(type,...) abort
     let type = a:type
@@ -112,7 +100,7 @@ func! markdowntable#ToTable(type,...) abort
         let i = 0
         while i < len(setline)
             let curline = setline[i]
-            let aflist = split(curline,'\M\[^\\]\zs\|\\\.\zs')
+            let aflist = split(curline,'\M\[^\\]\=\zs\|\\\.\zs')
             let StringDetect = []
             if len(StringP) > 1
                 for String in StringP
@@ -134,7 +122,6 @@ func! markdowntable#ToTable(type,...) abort
             let i += 1
         endwhile
     endif
-    echom string(setline)
     call map(setline,function('s:appendBar'))
     if bang && i != line2 && len(setline) != 0
         let bars = ' '.repeat('-',g:markdowntable_cellspaces).' |'
@@ -241,10 +228,38 @@ func! markdowntable#ToggleTable(type,...) abort
     return
 endfunc
 
+func! markdowntable#ToTableOp(type,...) abort
+    call markdowntable#ToTable('l','')
+    return
+endfunc
+
+func! markdowntable#ToTableAll(type,...) abort
+    call markdowntable#ToTable('l','All')
+    return
+endfunc
+
+func! markdowntable#UnTableOp(type,...) abort
+    call markdowntable#UnTable('l')
+    return
+endfunc
+
+func! markdowntable#ToggleTableOp(type,...) abort
+    call markdowntable#ToggleTable('l')
+    return
+endfunc
+
+" func! markdowntable#TT() abort
+"     if g:markdowntable_autoinputbar == 1
+"         let line = getline(line('.'))
+"         if line =~? '\M^\s\*|'
+"         endif
+"     endif
+"     return
+" endfunc
+
 func! s:echoWarn(msg) abort
     echohl WarningMsg
     redraw!
-    echomsg a:msg
     echohl None
     return -1
 endfunc
@@ -288,7 +303,7 @@ func! s:modeSwitch(type,...) abort
             call s:echored('Canceled')
             return
         elseif StringP == ''
-            let StringP = deepcopy(g:markdowntable_stringpriority)
+            let StringP = deepcopy(g:markdowntable_string_priority)
         else
             let StringP = split(StringP,'\s')
         endif
@@ -309,7 +324,7 @@ func! s:modeSwitch(type,...) abort
         if a:1[4] != ''
             let StringP = split(join(deepcopy(a:1[4:]),"\s"),'')
         else
-            let StringP = deepcopy(g:markdowntable_stringpriority)
+            let StringP = deepcopy(g:markdowntable_string_priority)
         endif
         let mode = a:1[3]
     endif
@@ -373,17 +388,12 @@ func! s:splitString(aflist,String) abort
     else
         let aflist = a:aflist
     endif
-    echom string(aflist)
-    echom string(aflist2)
     for curline in aflist
-        echom 'bef'.string(curline)
-        let curline = split(curline,'\M\[^\\]\zs'.a:String.'\ze')
-        echom 'af'.string(curline)
+        let curline = split(curline,'\M\[^\\]\=\zs'.a:String.'\ze')
         for i in curline
             call add(aflist2,i)
         endfor
     endfor
-    echom string(aflist2)
     let k = 0
     if len(aflist2) > 1
         while k < len(aflist2)
@@ -394,7 +404,6 @@ func! s:splitString(aflist,String) abort
         endwhile
     endif
     call map(aflist2,function('s:map'))
-    echom string(aflist2)
     return aflist2
 endfunc
 
@@ -516,25 +525,17 @@ func! s:appendBar(...) abort
     return curline
 endfunc
 
-func! markdowntable#ToTableOp(type,...) abort
-    call markdowntable#ToTable('l','')
+func! s:setdefault(var,data) abort
+    if !exists('g:'.a:var)
+        exe 'let g:'.a:var.'='.string(a:data)
+    endif
     return
 endfunc
 
-func! markdowntable#ToTableAll(type,...) abort
-    call markdowntable#ToTable('l','All')
-    return
-endfunc
-
-func! markdowntable#UnTableOp(type,...) abort
-    call markdowntable#UnTable('l')
-    return
-endfunc
-
-func! markdowntable#ToggleTableOp(type,...) abort
-    call markdowntable#ToggleTable('l')
-    return
-endfunc
+call s:setdefault('markdowntable_cellspaces',4)
+call s:setdefault('markdowntable_string_priority',[';',':',',','.','|',' '])
+call s:setdefault('markdowntable_noalign',1)
+call s:setdefault('markdowntable_untablestring',' ')
 
 let &cpo = s:savecpo
 unlet s:savecpo

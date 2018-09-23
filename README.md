@@ -2,6 +2,7 @@
 
 THIS PLUGIN IS NOT COMPLETED YET.  
 Plugin's mapping or command may change in the future.  
+This plugin made for me.Don't think about various environments.  
 
 ## Description
 
@@ -12,7 +13,7 @@ You can use comannd and mapping only in markdown files.
 
 **Note**  
 This plugin is made for me. So if you install this plugin, it may occur some problems.  
-I don't know how minimum vim-version move this function.  
+I don't know how minimum vim-version move this.  
 I know don't work in VI and work well in larger than Vim 8.0.  
 
 ## Usage
@@ -207,7 +208,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     vmap <Space>tt <Plug>(markdowntable_tablemake)
     ```
 
-+ \<Leader>ta
++ \<Leader>ta{motion}
 
     call :ToTableAll command.  
     You can input String.  
@@ -220,7 +221,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     vmap <Space>ta <Plug>(markdowntable_totableall)
     ```
 
-+ \<Leader>tu
++ \<Leader>tu{motion}
 
     call :UnTable command.  
     You can change default key mapping on your <code>.vimrc</code>.  
@@ -232,7 +233,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     vmap <Space>tu <Plug>(markdowntable_untable)
     ```
 
-+ \<Leader>tt
++ \<Leader>tt{motion}
 
     call :ToggleTable command.  
 
@@ -268,7 +269,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     By default, this variable is set below.  
 
     ```
-    let g:markdowntable_stringpriority = [';', ':', ',', '.', '|']
+    let g:markdowntable_string_priority = [';',':',',','.','|',' ']
     ```
 
     You can set own priorities of String by variable.  
@@ -276,7 +277,7 @@ If you want to enable these mapping, define g:markdowntable_enablemap.
     Example: set priority '|' → ',' → '.'  
 
     ```
-    let g:markdowntable_stringpriority = ['|', ',', '.']  
+    let g:markdowntable_string_priority = ['|', ',', '.']  
     ```
 
 + Don't make alinment line always when use mapping of :ToTable and :ToTableAll

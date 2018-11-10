@@ -305,7 +305,7 @@ let g:markdowntable_enablemap = 1
 
 + Want to convert separator to specific String
 
-You can change convert separator('|') to specific char by define this variable.  
+You can change convert separator('|') to specific character by define this variable.  
 Default: ' ' (space)  
 
 Example:  

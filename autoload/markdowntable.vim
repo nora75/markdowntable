@@ -338,14 +338,7 @@ func! s:remSpaces(...) abort
         let curline = a:1
     endif
     let curline = matchstr(curline,'\M\S\.\*')
-    if curline == ''
-        return ''
-    elseif curline =~ '\M\s\*$'
-        let ridx = match(curline,'\M\s\*$')
-    else
-        let ridx = len(curline)
-    endif
-    let curline = strcharpart(curline,0,ridx)
+    let curline = substitute(curline,'\M\s\*$','','g')
     return curline
 endfunc
 
